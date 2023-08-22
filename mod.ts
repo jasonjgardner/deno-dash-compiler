@@ -1,23 +1,24 @@
 // deno-lint-ignore-file no-explicit-any
-import { CLI } from './src/CLI.ts'
-import yargs from 'https://deno.land/x/yargs@v17.5.1-deno/deno.ts'
-import { comMojangFolder } from './src/comMojangFolder.ts'
-import { initRuntimes, swcVersion } from './src/deps.ts'
+import { CLI } from './src/CLI.ts';
+import yargs from 'https://deno.land/x/yargs@v17.5.1-deno/deno.ts';
+import { comMojangFolder } from './src/comMojangFolder.ts';
+import initSwc from 'npm:@swc/wasm-web';
 
 // @ts-ignore: Required by some of our dependencies
-window.global = window
+window.global = window;
 // @ts-ignore: Required by some of our dependencies
 window.process = {
 	cwd: () => '',
 	env: {},
-}
+};
 
-type YargsInstance = ReturnType<typeof yargs>
+type YargsInstance = ReturnType<typeof yargs>;
 
-initRuntimes(`https://esm.sh/@swc/wasm-web@${swcVersion}/wasm-web_bg.wasm`)
+// @ts-expect-error This is a global variable that is set by the swc loader
+await initSwc();
 
 if (import.meta.main) {
-	const cli = new CLI()
+	const cli = new CLI();
 
 	yargs(Deno.args)
 		.command(
@@ -41,11 +42,11 @@ if (import.meta.main) {
 						alias: 'c',
 						description: 'The compiler config file',
 						type: 'string',
-					})
+					});
 			},
 			async (argv: any) => {
-				await cli.build(argv)
-			}
+				await cli.build(argv);
+			},
 		)
 		.command(
 			'watch',
@@ -79,17 +80,17 @@ if (import.meta.main) {
 						})
 						// Need to use coerce rather than "default" so we can differentiate between when the option isn't used or is used without an argument
 						.coerce('reload', (arg: any) => {
-							if (!arg) return 8080
-							else return arg
+							if (!arg) return 8080;
+							else return arg;
 						})
-				)
+				);
 			},
 			async (argv: any) => {
-				await cli.watch(argv)
-			}
+				await cli.watch(argv);
+			},
 		)
 		.strictCommands(true)
 		.demandCommand(1)
 		.help()
-		.parse()
+		.parse();
 }

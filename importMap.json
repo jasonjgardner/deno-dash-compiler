@@ -1,7 +1,12 @@
 {
 	"imports": {
-		"dash-compiler": "https://raw.githubusercontent.com/bridge-core/dash-compiler/main/dist/dash-compiler.bundled.es.js",
+		"dash-compiler": "npm:dash-compiler@latest",
 		"dash-compiler-local": "../dash-compiler/dist/dash-compiler.bundled.es.js",
-		"mc-project-core": "npm:mc-project-core"
+		"mc-project-core": "npm:mc-project-core",
+		"bridge-common-utils": "npm:bridge-common-utils@0.3.3",
+		"bridge-js-runtime": "npm:bridge-js-runtime@latest",
+		"json5": "npm:json5@2.2.1",
+		"std/": "https://deno.land/std@0.198.0/",
+		"@swc/wasm-web": "npm:@swc/wasm-web@1.2.218"
 	}
 }
